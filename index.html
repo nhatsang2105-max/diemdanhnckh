@@ -2,61 +2,22 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Điểm danh QR</title>
+  <title>Test QR Điểm danh</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <style>
-    #reader { width: 400px; margin: auto; }
+    #reader { width: 300px; margin: auto; }
     #result { font-size: 1.2em; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h2>Quét mã QR để điểm danh</h2>
+  <h2>Quét mã QR</h2>
   <div id="reader"></div>
   <div id="result"></div>
   <script>
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbwfLJRW_GaEY9liqwtwQnT5RlRlDdV4HN_P2peMcjqEpPgigTNb-H709uLL_KJ2YV2m/exec"; // Thay bằng URL Apps Script của bạn
-//https://script.google.com/macros/s/AKfycbwfLJRW_GaEY9liqwtwQnT5RlRlDdV4HN_P2peMcjqEpPgigTNb-H709uLL_KJ2YV2m/exec
-    function checkAttendance(code) {
-      fetch(`${scriptUrl}?code=${encodeURIComponent(code)}`)
-        .then(res => res.text())
-        .then(result => {
-          if(result === "success") {
-            document.getElementById('result').innerHTML = "<span style='color:green'>Điểm danh thành công!</span>";
-          } else if(result === "fail") {
-            document.getElementById('result').innerHTML = "<span style='color:red'>Mã không hợp lệ!</span>";
-          } else {
-            document.getElementById('result').innerHTML = "<span style='color:orange'>Lỗi: Không nhận được mã.</span>";
-          }
-        });
-    }
-
     function onScanSuccess(decodedText, decodedResult) {
-      alert("Đã quét QR thành công, mã là: " + decodedText); // <--- THÊM DÒNG NÀY
-      document.getElementById('result').textContent = "Đang kiểm tra...";
-      checkAttendance(decodedText);
-      html5QrcodeScanner.clear(); // Tắt scanner sau khi quét
+      alert("Đã quét QR thành công, mã là: " + decodedText);
+      document.getElementById('result').textContent = "Kết quả: " + decodedText;
     }
-    function checkAttendance(code) {
-  alert("Sắp gửi lên API: " + code); // Debug 1
-fetch(`https://script.google.com/macros/s/AKfycbwfLJRW_GaEY9liqwtwQnT5RlRlDdV4HN_P2peMcjqEpPgigTNb-H709uLL_KJ2YV2m/exec?code=${encodeURIComponent(code)}`)
-    .then(res => res.text())
-    .then(result => {
-      alert("Kết quả trả về từ API: " + result); // Debug 2
-      if (result === "success") {
-        document.getElementById('result').innerHTML = "<span style='color:green'>Điểm danh thành công!</span>";
-      } else if (result === "fail") {
-        document.getElementById('result').innerHTML = "<span style='color:red'>Mã không hợp lệ hoặc đã điểm danh!</span>";
-      } else {
-        document.getElementById('result').innerHTML = "<span style='color:orange'>Lỗi! Không nhận được phản hồi phù hợp.</span>";
-      }
-    })
-    .catch(error => {
-      alert("Lỗi khi gọi API: " + error);  // Debug 3
-      document.getElementById('result').innerHTML = "<span style='color:orange'>Lỗi kết nối API!</span>";
-      console.error(error);
-    });
-}
-
     var html5QrcodeScanner = new Html5QrcodeScanner(
       "reader", { fps: 10, qrbox: 250 });
     html5QrcodeScanner.render(onScanSuccess);
