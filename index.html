@@ -36,9 +36,11 @@
       html5QrcodeScanner.clear(); // Tắt scanner sau khi quét
     }
     function checkAttendance(code) {
-  fetch(`https://script.google.com/macros/s/AKfycbwfLJRW_GaEY9liqwtwQnT5RlRlDdV4HN_P2peMcjqEpPgigTNb-H709uLL_KJ2YV2m/exec?code=${encodeURIComponent(code)}`)
+  alert("Sắp gửi lên API: " + code); // Debug 1
+fetch(`https://script.google.com/macros/s/AKfycbwfLJRW_GaEY9liqwtwQnT5RlRlDdV4HN_P2peMcjqEpPgigTNb-H709uLL_KJ2YV2m/exec?code=${encodeURIComponent(code)}`)
     .then(res => res.text())
     .then(result => {
+      alert("Kết quả trả về từ API: " + result); // Debug 2
       if (result === "success") {
         document.getElementById('result').innerHTML = "<span style='color:green'>Điểm danh thành công!</span>";
       } else if (result === "fail") {
@@ -48,6 +50,7 @@
       }
     })
     .catch(error => {
+      alert("Lỗi khi gọi API: " + error);  // Debug 3
       document.getElementById('result').innerHTML = "<span style='color:orange'>Lỗi kết nối API!</span>";
       console.error(error);
     });
