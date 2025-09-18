@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Điểm danh QR</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    #reader { width: 400px; margin: auto; }
+    #result { font-size: 1.2em; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Quét mã QR để điểm danh</h2>
+  <div id="reader"></div>
+  <div id="result"></div>
+  <script>
+    const scriptUrl = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"; // Thay bằng URL Apps Script của bạn
+
+    function checkAttendance(code) {
+      fetch(`${scriptUrl}?code=${encodeURIComponent(code)}`)
+        .then(res => res.text())
+        .then(result => {
+          if(result === "success") {
+            document.getElementById('result').innerHTML = "<span style='color:green'>Điểm danh thành công!</span>";
+          } else if(result === "fail") {
+            document.getElementById('result').innerHTML = "<span style='color:red'>Mã không hợp lệ!</span>";
+          } else {
+            document.getElementById('result').innerHTML = "<span style='color:orange'>Lỗi: Không nhận được mã.</span>";
+          }
+        });
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+      document.getElementById('result').textContent = "Đang kiểm tra...";
+      checkAttendance(decodedText);
+      html5QrcodeScanner.clear(); // Tắt scanner sau khi quét
+    }
+
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess);
+  </script>
+</body>
+</html>
