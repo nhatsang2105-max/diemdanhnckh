@@ -32,7 +32,6 @@
 
     function onScanSuccess(decodedText, decodedResult) {
       alert("Đã quét QR thành công, mã là: " + decodedText); // <--- THÊM DÒNG NÀY
-      console.log("Đã quét QR thành công:", decodedText); // Ghi log ra console DevTools
       document.getElementById('result').textContent = "Đang kiểm tra...";
       checkAttendance(decodedText);
       html5QrcodeScanner.clear(); // Tắt scanner sau khi quét
